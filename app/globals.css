@@ -1,0 +1,139 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@theme {
+  --color-primary: #0F3D3E;
+  --color-primary-light: #1a5a5c;
+  --color-primary-dark: #082425;
+  --color-secondary: #1B5E20;
+  --color-accent: #FF8F00;
+  --color-bg-main: #F5F7FA;
+  --color-bg-card: #FFFFFF;
+  --color-bg-soft: #F1F3F6;
+  --color-text-primary: #1A1A1A;
+  --color-text-secondary: #4A4A4A;
+  --color-border: #E2E8F0;
+
+  --font-cairo: var(--font-cairo);
+  --font-inter: var(--font-inter);
+
+  --container-max-width: 1200px;
+}
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    overflow-x: hidden;
+    font-size: 14px; /* Reduced base font size for better scaling */
+    @screen md {
+      font-size: 16px;
+    }
+  }
+
+  body {
+    @apply bg-bg-main text-text-primary font-cairo;
+    overflow-x: hidden;
+    width: 100%;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1 { font-size: clamp(1.5rem, 4vw, 2.25rem); }
+  h2 { font-size: clamp(1.25rem, 3vw, 1.75rem); }
+  h3 { font-size: clamp(1.125rem, 2.5vw, 1.375rem); }
+  p { font-size: clamp(0.875rem, 1.2vw, 0.9375rem); }
+
+  .container {
+    max-width: var(--container-max-width);
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    @screen md {
+      padding-left: 2rem;
+      padding-right: 2rem;
+    }
+  }
+}
+
+@layer components {
+  .section-padding {
+    @apply py-6 md:py-10 lg:py-12; /* Reduced excessive margins between sections */
+  }
+  
+  .glass-card {
+    @apply bg-white/80 backdrop-blur-md border border-white/20 shadow-sm transition-all duration-300 hover:shadow-md hover:-translate-y-1;
+  }
+  
+  .btn-primary {
+    @apply bg-primary text-white px-6 py-3 rounded-xl font-bold transition-all hover:bg-primary-light hover:shadow-lg active:scale-95 flex items-center justify-center gap-2;
+  }
+
+  .btn-secondary {
+    @apply bg-secondary text-white px-6 py-3 rounded-xl font-bold transition-all hover:opacity-90 hover:shadow-lg active:scale-95 flex items-center justify-center gap-2;
+  }
+
+  .btn-outline {
+    @apply border-2 border-primary text-primary px-6 py-3 rounded-xl font-bold transition-all hover:bg-primary hover:text-white active:scale-95 flex items-center justify-center gap-2;
+  }
+
+  /* Improved Input Styles */
+  .input-field {
+    @apply bg-white border border-[#DADADA] rounded-lg p-3 text-[15px] w-full transition-all focus:border-[#1B5E20] focus:ring-1 focus:ring-[#1B5E20] outline-none;
+  }
+
+  /* Improved Button Styles */
+  .btn-gov {
+    @apply bg-[#1B5E20] text-white rounded-lg px-[18px] py-[10px] font-bold transition-all hover:opacity-90 active:scale-95 flex items-center justify-center gap-2;
+  }
+
+  /* Global Image Responsive Rules */
+  img {
+    @apply max-w-full h-auto object-cover;
+  }
+}
+
+/* Watermark Backgrounds */
+.watermark-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: -1;
+  opacity: 0.05;
+  overflow: hidden;
+}
+
+.watermark-icon {
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  color: var(--color-primary);
+}
+
+/* Theme Specifics */
+[data-theme='night'] {
+  --color-bg-main: #0A192F;
+  --color-bg-card: #112240;
+  --color-bg-soft: #1D2D50;
+  --color-text-primary: #E6F1FF;
+  --color-text-secondary: #8892B0;
+  --color-border: #233554;
+}
+
+[data-theme='ramadan'] {
+  --color-primary: #1E4D2B;
+  --color-accent: #D4AF37;
+}
+
+[data-theme='eid'] {
+  --color-primary: #4B0082;
+  --color-accent: #FFD700;
+}

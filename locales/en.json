@@ -1,0 +1,170 @@
+{
+  "nav": {
+    "home": "Home",
+    "company": "Company",
+    "about": "About Us",
+    "ceo_message": "Executive GM Message",
+    "branches": "Branches & Offices",
+    "strategic_plan": "Strategic Plan",
+    "services": "Company Services",
+    "user_guide": "User Guide",
+    "procedures_guide": "Procedures Guide",
+    "transaction_inquiry": "Transaction Inquiry",
+    "fuel_license": "Fuel Station License",
+    "direct_marketing": "Direct Marketing",
+    "aircraft_fuel": "Aircraft Fueling",
+    "ev_charging": "EV Charging Stations",
+    "transport_contract": "Transport Contracts",
+    "projects": "Projects",
+    "news": "News",
+    "tenders": "Tenders",
+    "contact": "Contact Us",
+    "media_center": "Media Center"
+  },
+  "home": {
+    "hero": [
+      {
+        "title": "Securing the Nation's Petroleum Needs",
+        "subtitle": "Yemen Oil Company - Leadership in National Service and Sustainable Development"
+      },
+      {
+        "title": "Advanced Infrastructure for Citizens",
+        "subtitle": "We work on modernizing and developing our oil facilities in all governorates"
+      },
+      {
+        "title": "Digital Transformation in Oil Services",
+        "subtitle": "We strive to provide our services electronically to facilitate procedures and ensure transparency"
+      }
+    ],
+    "hero_title": "Securing the Nation's Petroleum Needs",
+    "hero_subtitle": "Yemen Oil Company - Leadership in National Service and Sustainable Development",
+    "ceo_title": "General Manager's Message",
+    "ceo_quote": "We are committed to providing energy for Yemen, ensuring the stability of oil supplies across the nation.",
+    "ceo_text": "Yemen Oil Company was established to be the cornerstone of the national energy sector. We work hard to develop our infrastructure and adopt the latest technologies to ensure that oil derivatives reach every citizen efficiently and transparently. Our vision is leadership and excellence in serving the community and contributing effectively to sustainable development.",
+    "fuel_prices": "Fuel Prices",
+    "stats_title": "Numbers & Achievements",
+    "stats": {
+      "requests": "Number of Requests",
+      "services": "Number of Services",
+      "entities": "Government Entities",
+      "stations": "Number of Stations",
+      "agents": "Authorized Agents",
+      "tankers": "Tankers Fleet",
+      "ev_stations": "EV Charging Stations"
+    },
+    "projects_title": "Strategic Projects",
+    "latest_news": "Latest News"
+  },
+  "common": {
+    "read_more": "Read More",
+    "submit_request": "Submit Request",
+    "full_name": "Full Name",
+    "email": "Email Address",
+    "phone_number": "Phone Number",
+    "national_id": "National ID",
+    "governorate": "Governorate",
+    "description": "Description",
+    "attachments": "Attachments",
+    "select_user_type": "Select User Type",
+    "citizen": "Citizen",
+    "non-resident": "Non-Resident",
+    "company": "Company/Entity",
+    "official_email": "Official Email",
+    "country": "Country",
+    "passport_number": "Passport Number",
+    "complaint": "Complaint",
+    "suggestion": "Suggestion",
+    "inquiry": "Inquiry",
+    "other": "Other",
+    "report": "Report",
+    "citizen_resident": "Citizen / Resident",
+    "non_resident": "Visitor / Non-Resident",
+    "complaint_platform_title": "Complaints & Suggestions Platform",
+    "complaint_platform_subtitle": "Your voice matters.. We welcome your feedback to improve our services",
+    "total_requests": "Total Requests",
+    "total_services": "Total Services",
+    "gov_entities": "Gov Entities",
+    "company_name": "Company Name",
+    "commercial_reg": "Commercial Registration",
+    "business_id": "Tax/Business ID",
+    "corporate_services_title": "Corporate Services",
+    "corporate_services_desc": "Specialized support for our business partners and corporate entities.",
+    "request_submitted_title": "Request Submitted Successfully",
+    "request_submitted_desc": "Thank you for your feedback. Your request has been received and will be processed by our team. You will receive an update via your provided contact information.",
+    "reference_id": "Reference ID",
+    "return_to_platform": "Return to Platform",
+    "drag_drop_files": "Drag and drop files here or click to browse",
+    "max_file_size": "Maximum file size: 10MB (PDF, JPG, PNG)",
+    "submitting": "Submitting...",
+    "click_to_submit": "Click to submit",
+    "select": "Select",
+    "electronic_services": "Electronic Services",
+    "explore_services": "Explore Services",
+    "submit_complaint": "Submit Complaint",
+    "select_language": "Select Language",
+    "last_updated": "Last Updated",
+    "fuel": {
+      "diesel": "Diesel",
+      "mazut": "Mazut",
+      "kerosene": "Kerosene",
+      "turbine": "Turbine"
+    },
+    "view_all_projects": "View All Projects",
+    "learn_more": "Learn More",
+    "business_opportunities": "Business Opportunities",
+    "all_tenders": "All Tenders",
+    "deadline": "Deadline",
+    "details": "Details",
+    "footer_desc": "Leading the national energy sector with excellence, innovation, and a commitment to sustainable development for our nation.",
+    "quick_links": "Quick Links",
+    "contact_us": "Contact Us",
+    "newsletter": "Newsletter",
+    "newsletter_desc": "Subscribe to our newsletter for latest updates and news.",
+    "your_email": "Your Email",
+    "privacy_policy": "Privacy Policy",
+    "terms_of_service": "Terms of Service",
+    "sitemap": "Sitemap",
+    "copyright": "© 2026 Yemen Oil Company. All rights reserved.",
+    "address": "General Administration, Al-Zubairi St, Sana'a, Yemen"
+  },
+  "procedures_guide": {
+    "title": "Procedures & Regulations Guide",
+    "subtitle": "We are committed to providing all necessary information and guidance to ensure smooth operations for our customers and partners.",
+    "file_size": "File Size",
+    "download": "Download PDF",
+    "need_help_title": "Need additional help?",
+    "need_help_desc": "If you couldn't find what you're looking for in the guides above, please contact our support team.",
+    "contact_us": "Contact Us",
+    "back_home": "Back to Home"
+  },
+ "user_guide": {
+  "title": "User Guide & Help",
+  "description": "This guide aims to simplify the user journey across our platform and provide all necessary instructions for using services effectively.",
+  "download": "Download PDF",
+  "file_size": "File Size",
+  "technical_issue_title": "Facing a technical issue?",
+  "technical_issue_desc": "Our technical support team is available to help solve any issues encountered while using the platform.",
+  "submit_report": "Submit Technical Report",
+  "back_home": "Back to Home"
+},
+
+    "guides": {
+      "guide1_title": "Portal Usage Guide",
+      "guide1_desc": "Detailed steps for registration and accessing electronic services.",
+      "guide2_title": "License Application Guide",
+      "guide2_desc": "Step-by-step instructions for submitting license requests.",
+      "guide3_title": "Inquiry & Tracking Guide",
+      "guide3_desc": "How to track requests using reference numbers."
+    },
+    
+    "file_size": "File Size",
+    "download_pdf": "Download PDF",
+    "support_title": "Facing Technical Issues?",
+    "support_desc": "Our technical team is ready to help you resolve any issues.",
+    "technical_report": "Submit Technical Report",
+    "back_home": "Back to Home"
+  
+
+  
+}
+
