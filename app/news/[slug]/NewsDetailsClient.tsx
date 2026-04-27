@@ -12,7 +12,14 @@ import { Toast } from '@/components/ui/Toast';
 import { apiService } from '@/lib/api-service';
 import { API_CONFIG } from '@/lib/api-config';
 import { Skeleton } from '@/components/ui/Skeleton';
+import DOMPurify from 'dompurify';
 import Image from 'next/image';
+import { getImageUrl } from "@/lib/image-utils";
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+
 
 export default function NewsDetailsPage() {
   const { slug } = useParams();
@@ -133,23 +140,31 @@ export default function NewsDetailsPage() {
 
         console.log("DETAIL RESULT:", result);
 
+        // const item = Array.isArray(result.data)
+        //   ? result.data[0]
+        //   : result.data || result.message;
         const item = result.data;
+
+        console.log("ITEM:", item);
+        console.log("GALLERY RAW:", item.gallery_images);
 
         if (item) {
 
           // تجهيز صور المعرض
 
-          const galleryImages = item.gallery_images
-            ?.map((img: any) =>
-              img.image
-                ? (
-                  img.image.startsWith("http")
-                    ? img.image
-                    : `${API_CONFIG.BASE_URL}${img.image}`
-                )
-                : null
-            )
-            .filter(Boolean) || [];
+          // const galleryImages = (item.gallery_images || [])
+          //   .map((img: any) => {
+          //     if (!img.image) return null;
+
+          //     return img.image.startsWith("http")
+          //       ? img.image
+          //       : `${API_CONFIG.BASE_URL}${img.image}`;
+          //   })
+          const galleryImages = (item.gallery_images || [])
+            .map((img: any) => getImageUrl(img.image))
+            .filter(Boolean);
+
+          console.log("galleryImages FINAL:", galleryImages);
 
           setGalleryImages(galleryImages);
 
@@ -159,13 +174,14 @@ export default function NewsDetailsPage() {
             title: item.title,
             date: item.date,
             category: item.category,
+            // image: item.image
+            //   ? `${API_CONFIG.BASE_URL}${item.image}`
+            //   : "/news-placeholder.jpg",
+            image: getImageUrl(item.image),
 
-            image: item.image
-              ? `${API_CONFIG.BASE_URL}${item.image}`
-              : "/news-placeholder.jpg",
-
-            content: item.content || item.description
-
+            // تأكد من جلب content أو description أيهما يحتوي على النص
+            content: item.content || "",
+            description: item.description || ""
           });
 
         }
@@ -263,7 +279,6 @@ export default function NewsDetailsPage() {
     typeof window !== "undefined"
       ? window.location.href
       : "";
-
   const shareText = news?.title || "";
   const shareLinks = {
     facebook:
@@ -300,7 +315,7 @@ export default function NewsDetailsPage() {
   if (!news) return <div className="min-h-screen flex items-center justify-center">News not found</div>;
 
   return (
-    <main className="min-h-screen bg-bg-main pb-20">
+    <main className="min-h-screen bg-bg-main pb-20"> 
       <PageHero
         title={news.title}
         image={news.image}
@@ -312,48 +327,80 @@ export default function NewsDetailsPage() {
           animate={{ opacity: 1, y: 0 }}
           className="max-w-4xl mx-auto"
         >
+         
           {/* Meta Info */}
           <div className="flex flex-wrap items-center justify-between gap-6 mb-12 pb-8 border-b border-border">
-            <div className="flex items-center gap-6">
-              <div className="flex items-center gap-2 text-text-secondary font-bold uppercase tracking-widest text-sm">
+
+            {/* معلومات الخبر */}
+            <div className="flex items-center gap-6 flex-wrap">
+
+              <div className="flex items-center gap-2 text-text-secondary font-semibold text-sm">
                 <Calendar size={18} className="text-primary" />
-                {news.date}
+                <span>{news.date}</span>
               </div>
+
               <div className="bg-primary/10 text-primary text-xs font-black px-4 py-1.5 rounded-full uppercase tracking-widest">
                 {news.category}
               </div>
+
             </div>
 
-            {/* Social Share */}
+            {/* مشاركة */}
             <div className="flex items-center gap-3">
-              <span className="text-text-secondary font-bold text-sm ml-2">مشاركة:</span>
+              <span className="text-text-secondary font-semibold text-sm">
+                مشاركة
+              </span>
               <button
                 onClick={() => window.open(shareLinks.facebook, '_blank')}
+                aria-label="Share on Facebook"
                 className="w-10 h-10 rounded-xl bg-white border border-border flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-all shadow-sm"
               >
                 <Facebook size={18} />
               </button>
+
               <button
                 onClick={() => window.open(shareLinks.twitter, '_blank')}
+                aria-label="Share on Twitter"
                 className="w-10 h-10 rounded-xl bg-white border border-border flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-all shadow-sm"
               >
                 <Twitter size={18} />
               </button>
+
               <button
                 onClick={() => window.open(shareLinks.whatsapp, '_blank')}
+                aria-label="Share on WhatsApp"
                 className="w-10 h-10 rounded-xl bg-white border border-border flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-all shadow-sm"
               >
                 <MessageCircle size={18} />
               </button>
+
             </div>
           </div>
-
-          {/* Content */}
+          
+      
+          {/* Content Area */}
           <div className="prose prose-lg md:prose-xl max-w-none text-text-primary leading-loose mb-16 bg-white p-8 md:p-12 rounded-[32px] shadow-sm border border-border">
-            <p className="text-lg md:text-xl">{news.content}</p>
-            <p className="text-lg md:text-xl">ومن المتوقع أن تسهم هذه الخطوة في تعزيز القدرات التشغيلية للشركة ورفع كفاءة الأداء في مختلف القطاعات، بما يتماشى مع الأهداف الاستراتيجية المرسومة للمرحلة القادمة.</p>
-          </div>
 
+            {/* تفاصيل الخبر */}
+            {news.description && (
+              <div
+                className="text-xl font-black text-primary mb-1"
+                dangerouslySetInnerHTML={{
+                  __html: DOMPurify.sanitize(news.description)
+                }}
+              />
+            )}
+
+            {/* محتوى الخبر */}
+            {news.content && (
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: DOMPurify.sanitize(news.content)
+                }}
+              />
+            )}
+
+          </div> 
           {/* Gallery Section */}
           <div className="mb-20 bg-bg-soft p-8 md:p-12 rounded-[40px] border border-border">
             <div className="flex items-center gap-3 mb-8">
@@ -370,29 +417,32 @@ export default function NewsDetailsPage() {
                   exit={{ opacity: 0, scale: 0.95 }}
                   transition={{ duration: 0.5 }}
                   className="absolute inset-0"
-                >
+                > 
                   <Image
                     src={
-                      galleryImages[activeImage]
-                      || "/news-placeholder.jpg"
+                      galleryImages.length > 0
+                        ? galleryImages[activeImage]
+                        : "/news-placeholder.jpg"
                     }
                     alt="Gallery"
                     fill
+                    sizes="(max-width: 768px) 100vw, 50vw"
                     className="object-contain"
                     referrerPolicy="no-referrer"
+                    unoptimized
                   />
                 </motion.div>
               </AnimatePresence>
 
               <div className="absolute inset-0 flex items-center justify-between px-4 pointer-events-none">
                 <button
-                  onClick={() => setActiveImage((prev) => (prev - 1 + galleryImages.length) % galleryImages.length)}
+                  onClick={() => galleryImages.length > 0 && setActiveImage((prev) => (prev - 1 + galleryImages.length) % galleryImages.length)}
                   className="w-10 h-10 rounded-full bg-white/90 shadow-lg flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-all pointer-events-auto"
                 >
                   <ChevronLeft size={20} className="rtl:rotate-180" />
                 </button>
                 <button
-                  onClick={() => setActiveImage((prev) => (prev + 1) % galleryImages.length)}
+                  onClick={() => galleryImages.length > 0 && setActiveImage((prev) => (prev + 1) % galleryImages.length)}
                   className="w-10 h-10 rounded-full bg-white/90 shadow-lg flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-all pointer-events-auto"
                 >
                   <ChevronRight size={20} className="rtl:rotate-180" />
@@ -401,12 +451,12 @@ export default function NewsDetailsPage() {
             </div>
 
             <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
-              {galleryImages.length > 0 ? (
+              {galleryImages.length > 0 ? (  
 
-                galleryImages.map((img, idx) => (
+                galleryImages.map((img, idx) => ( 
                   <button
                     key={idx}
-                    onClick={() => setActiveImage(idx)}
+                    onClick={() => setActiveImage(idx)}// تحديث الصورة النشطة عند النقر على الصورة المصغرة
                     className={`relative w-20 h-20 rounded-xl overflow-hidden border-2 transition-all shrink-0 ${activeImage === idx
                       ? 'border-accent scale-105 shadow-md'
                       : 'border-transparent opacity-50 hover:opacity-100'
@@ -417,6 +467,7 @@ export default function NewsDetailsPage() {
                       alt={`Thumb ${idx}`}
                       fill
                       className="object-cover"
+                      unoptimized
                     />
                   </button>
                 ))

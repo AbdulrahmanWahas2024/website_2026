@@ -5,6 +5,9 @@ import { LanguageProvider } from '@/context/LanguageContext';
 import { ThemeProvider } from '@/context/ThemeContext';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
 
 const cairo = Cairo({
   subsets: ['arabic', 'latin'],

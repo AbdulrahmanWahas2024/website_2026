@@ -37,6 +37,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
       } else {
         document.body.classList.add('font-inter');
         document.body.classList.remove('font-cairo');
+ 
       }
     }
   }, [mounted, language]);

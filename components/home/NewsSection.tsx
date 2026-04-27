@@ -83,7 +83,9 @@ export default function NewsSection() {
           "category",
           "date",
           "image",
-          "published"
+          "published",
+          "content",
+          "description"
         ]));
 
         const filters = encodeURIComponent(JSON.stringify([
@@ -117,7 +119,7 @@ export default function NewsSection() {
           image: item.image
             ? `${API_CONFIG.BASE_URL}${item.image}`
             : "/placeholder-news.jpg",
-          summary: item.title // 
+          summary: item.description // 
         }));
 
         setNews(formattedData);
@@ -179,11 +181,11 @@ export default function NewsSection() {
 
               <div key={idx} className="space-y-6">
 
-                <Skeleton className="h-[200px] md:h-[280px] w-full rounded-2xl bg-primary/5" />
+                <Skeleton className="h-[200px] md:h-[280px] w-full rounded-2xl bg-primary/5" /> 
 
                 <Skeleton className="h-6 w-3/4 bg-primary/5" />
 
-                <Skeleton className="h-4 w-full bg-primary/5" />
+                <Skeleton className="h-4 w-full bg-primary/5" />  
 
               </div>
 
@@ -231,25 +233,22 @@ export default function NewsSection() {
                   </div>
 
                   <div className="space-y-4">
-
                     <div className="flex items-center gap-4 text-text-secondary/60 text-[10px] font-bold uppercase tracking-widest">
 
                       <div className="flex items-center gap-1.5">
 
                         <Calendar size={14} className="text-accent" />
 
-                        <span>{item.date}</span>
+                        <span>{item.date}</span>  
 
                       </div>
 
                       <div className="w-1 h-1 rounded-full bg-border" />
-
                       <div className="flex items-center gap-1.5">
 
                         <Tag size={14} className="text-accent" />
 
                         <span>{item.category}</span>
-
                       </div>
 
                     </div>
@@ -257,28 +256,25 @@ export default function NewsSection() {
                     <h3 className="text-xl font-black text-primary leading-tight group-hover:text-accent transition-colors line-clamp-2">
 
                       {item.title}
-
                     </h3>
 
                     <p className="text-text-secondary text-sm leading-relaxed line-clamp-3 opacity-70">
 
                       {item.summary}
-
                     </p>
 
                     <div className="pt-4 flex items-center gap-2 text-primary font-black text-xs uppercase tracking-widest group-hover:gap-4 transition-all">
 
-                      {t('common.read_more')}
+                      {t('common.read_more')} 
 
-                      <ArrowRight size={16} className="rtl:rotate-180 text-accent" />
-
+                      <ArrowRight size={16} className="rtl:rotate-180 text-accent" /> 
                     </div>
 
                   </div>
 
-                </Link>
+                </Link> 
 
-              </motion.div>
+              </motion.div> // بطاقة الخبر مع تأثيرات الحركة والتنسيق   
 
             ))
 
@@ -286,7 +282,7 @@ export default function NewsSection() {
 
         </div>
 
-      </Container>
+      </Container> 
     </section>
   );
 }
