@@ -1,15 +1,17 @@
-import { API_CONFIG } from "./api-config";
+import { API_CONFIG } from "@/lib/api-config";
 
-export function getImageUrl(path?: string | null) {
-    if (!path) return "/news-placeholder.jpg";
+export const getImageUrl = (img?: string) => {
+  if (!img) return "/news-placeholder.jpg";
 
-    // لو رابط كامل
-    if (path.startsWith("http")) return path;
+  if (img.startsWith("http")) return img;
 
-    // لو يبدأ بـ /files
-    if (path.startsWith("/files")) {
-        return `${API_CONFIG.BASE_URL}${path}`;
-    }
+  if (img.startsWith("/files")) {
+    return `${API_CONFIG.BASE_URL}${img}`;
+  }
 
+  if (img.startsWith("/private")) {
     return "/news-placeholder.jpg";
-}
+  }
+
+  return `${API_CONFIG.BASE_URL}${img}`;
+};

@@ -14,11 +14,23 @@ import { API_CONFIG } from '@/lib/api-config';
 import { Skeleton } from '@/components/ui/Skeleton';
 import DOMPurify from 'dompurify';
 import Image from 'next/image';
-import { getImageUrl } from "@/lib/image-utils";
+//import { getImageUrl } from "@/lib/image";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
+import {
+  getMediaUrl
+} from "@/lib/media";
+import {
+  getImageUrl,
+  normalizeGalleryImages
+} from "@/lib/image";
+import {
+  normalizeGallery
+} from "@/lib/media";
+import { useRef } from "react";
+
 
 
 export default function NewsDetailsPage() {
@@ -29,87 +41,10 @@ export default function NewsDetailsPage() {
   const [loading, setLoading] = useState(true);
   const [showToast, setShowToast] = useState(false);
   const [activeImage, setActiveImage] = useState(0);
-  const [galleryImages, setGalleryImages] = useState<string[]>([]);
+  const [galleryImages, setGalleryImages] = useState<Array<{ type: string; url: string }>>([]);
+  const heroRef = useRef<HTMLDivElement>(null);
+  
 
-  /* const galleryImages = [
-    'https://picsum.photos/seed/news1/800/600',
-    'https://picsum.photos/seed/news2/800/600',
-    'https://picsum.photos/seed/news3/800/600',
-    'https://picsum.photos/seed/news4/800/600',
-  ]; */
-
-  /*  useEffect(() => {
- 
-     const fetchNewsDetails = async () => {
-       try {
-         setLoading(true);
-         const fields = encodeURIComponent(JSON.stringify([
-           "name",
-           "title",
-           "category",
-           "date",
-           "image",
-           "content",
-           "published"
-         ]));
- 
-         const filters = encodeURIComponent(JSON.stringify([
-           ["published", "=", 1],
-           ["name", "=", slug]
-         ]));
- 
-         const url =
-           `${API_CONFIG.BASE_URL}/api/resource/${API_CONFIG.DOC_TYPES.NEWS}` +
-           `?fields=${fields}` +
-           `&filters=${filters}`;
- 
-         console.log("DETAIL URL:", url);
- 
-         const response = await fetch(url);
- 
-         const result = await response.json();
- 
-         console.log("DETAIL RESULT:", result);
- 
-         const item = result.data?.[0];
- 
-         if (item) {
- 
-           setNews({
-             id: item.name,
-             title: item.title,
-             date: item.date,
-             category: item.category,
- 
-             image: item.image
-               ? (item.image.startsWith('http')
-                 ? item.image
-                 : `${API_CONFIG.BASE_URL}${item.image}`)
-               : "/placeholder-news.jpg",
- 
-             content: item.content || item.description
-           });
- 
-         } else {
-           setNews(null);
-         }
- 
-       } catch (err) {
- 
-         console.error("DETAIL ERROR:", err);
- 
-       } finally {
- 
-         setLoading(false);
-       }
- 
-     };
- 
-     if (slug) {
-       fetchNewsDetails();
-     }
- 
-   }, [slug]); */
   useEffect(() => {
     const fetchNewsDetails = async () => {
 
@@ -139,6 +74,7 @@ export default function NewsDetailsPage() {
         const result = await response.json();
 
         console.log("DETAIL RESULT:", result);
+        
 
         // const item = Array.isArray(result.data)
         //   ? result.data[0]
@@ -151,23 +87,21 @@ export default function NewsDetailsPage() {
         if (item) {
 
           // تجهيز صور المعرض
+          const normalizedGalleryImages = normalizeGallery(item.gallery_images);// 
 
-          // const galleryImages = (item.gallery_images || [])
-          //   .map((img: any) => {
-          //     if (!img.image) return null;
+          const fixedGallery = normalizedGalleryImages
+            .map((media: any) => {
+              if (!media) return null;
 
-          //     return img.image.startsWith("http")
-          //       ? img.image
-          //       : `${API_CONFIG.BASE_URL}${img.image}`;
-          //   })
-          const galleryImages = (item.gallery_images || [])
-            .map((img: any) => getImageUrl(img.image))
-            .filter(Boolean);
+              return {
+                type: (media.type || "image").toLowerCase(), // حل مشكلة Image vs image
+                url: getMediaUrl(media.url || media.file || media), //  الأهم
+              };
+            })
+            .filter((item): item is { type: string; url: string } => item !== null);
 
-          console.log("galleryImages FINAL:", galleryImages);
-
-          setGalleryImages(galleryImages);
-
+          setGalleryImages(fixedGallery);// مهم: نستخدم الدالة لتحويل المسارات إلى روابط كاملة
+          setActiveImage(0);
           setNews({
 
             id: item.name,
@@ -178,7 +112,7 @@ export default function NewsDetailsPage() {
             //   ? `${API_CONFIG.BASE_URL}${item.image}`
             //   : "/news-placeholder.jpg",
             image: getImageUrl(item.image),
-
+            // استخدام الدالة لتحويل مسار الصورة إلى URL كامل   
             // تأكد من جلب content أو description أيهما يحتوي على النص
             content: item.content || "",
             description: item.description || ""
@@ -197,75 +131,6 @@ export default function NewsDetailsPage() {
       }
 
     };
-
-    /* const fetchNewsDetails = async () => {
-
-      try {
-
-        setLoading(true);
-
-        const fields = encodeURIComponent(JSON.stringify([
-          "name",
-          "title",
-          "category",
-          "date",
-          "image",
-          "content",
-          "description",
-          "gallery_images"
-        ]));
-
-        const filters = encodeURIComponent(JSON.stringify([
-          ["name", "=", slug]
-        ]));
-
-        const url =
-          `${API_CONFIG.BASE_URL}/api/resource/${API_CONFIG.DOC_TYPES.NEWS}` +
-          `?fields=${fields}` +
-          `&filters=${filters}`;
-
-        console.log("DETAIL URL:", url);
-
-        const response = await fetch(url);
-
-        const result = await response.json();
-
-        console.log("DETAIL RESULT:", result);
-
-        const item = result.data?.[0];
-
-        if (item) {
-
-          setNews({
-            id: item.name,
-            title: item.title,
-            date: item.date,
-            category: item.category,
-
-            image: item.image
-              ? `${API_CONFIG.BASE_URL}${item.image}`
-              : "/news-placeholder.jpg",
-
-            content: item.content || item.description
-          });
-
-        } else {
-
-          setNews(null);
-
-        }
-
-      } catch (err) {
-
-        console.error("DETAIL ERROR:", err);
-
-      } finally {
-
-        setLoading(false);
-
-      }
-
-    }; */
 
     if (slug) {
       fetchNewsDetails();
@@ -375,8 +240,7 @@ export default function NewsDetailsPage() {
               </button>
 
             </div>
-          </div>
-          
+          </div>  
       
           {/* Content Area */}
           <div className="prose prose-lg md:prose-xl max-w-none text-text-primary leading-loose mb-16 bg-white p-8 md:p-12 rounded-[32px] shadow-sm border border-border">
@@ -418,19 +282,41 @@ export default function NewsDetailsPage() {
                   transition={{ duration: 0.5 }}
                   className="absolute inset-0"
                 > 
-                  <Image
-                    src={
-                      galleryImages.length > 0
-                        ? galleryImages[activeImage]
-                        : "/news-placeholder.jpg"
-                    }
-                    alt="Gallery"
-                    fill
-                    sizes="(max-width: 768px) 100vw, 50vw"
-                    className="object-contain"
-                    referrerPolicy="no-referrer"
-                    unoptimized
-                  />
+                  {galleryImages.length > 0 && (
+
+                    galleryImages[activeImage].type === "video" ? (
+
+                      <video
+                        src={galleryImages[activeImage].url}
+                        controls
+                        playsInline
+                        preload="metadata"
+                       // muted
+                        className="w-full h-full object-contain"
+                        onDoubleClick={(e) => e.currentTarget.requestFullscreen()}
+                      />
+
+                    ) : galleryImages[activeImage].type === "pdf" ? (
+
+                      <iframe
+                        src={galleryImages[activeImage].url}
+                        className="w-full h-full"
+                      />
+
+                    ) : (
+
+                      <Image
+                        src={galleryImages[activeImage].url}
+                        alt="Gallery"
+                        fill
+                        className="object-contain"
+                        unoptimized
+                      />
+
+                    )
+
+                  )}
+                  
                 </motion.div>
               </AnimatePresence>
 
@@ -450,36 +336,49 @@ export default function NewsDetailsPage() {
               </div>
             </div>
 
-            <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
-              {galleryImages.length > 0 ? (  
-
-                galleryImages.map((img, idx) => ( 
-                  <button
-                    key={idx}
-                    onClick={() => setActiveImage(idx)}// تحديث الصورة النشطة عند النقر على الصورة المصغرة
-                    className={`relative w-20 h-20 rounded-xl overflow-hidden border-2 transition-all shrink-0 ${activeImage === idx
-                      ? 'border-accent scale-105 shadow-md'
-                      : 'border-transparent opacity-50 hover:opacity-100'
-                      }`}
-                  >
-                    <Image
-                      src={img}
-                      alt={`Thumb ${idx}`}
-                      fill
-                      className="object-cover"
-                      unoptimized
-                    />
-                  </button>
-                ))
-
-              ) : (
-
-                <p className="text-gray-400">
-                  لا توجد صور للخبر
-                </p>
-
-              )}
-            </div>
+            
+              <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide"> 
+                {galleryImages.length > 0 ? (
+                  galleryImages.map((img, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => setActiveImage(idx)}
+                      className={`relative w-25 h-25 rounded-xl overflow-hidden border-2 transition-all shrink-0
+                        ${activeImage === idx
+                          ? "border-accent scale-105 shadow-md"
+                          : "border-transparent opacity-50 hover:opacity-100"
+                        }`}
+                    >
+                      {img.type === "video" ? (
+                        <video
+                          src={img.url}
+                          muted
+                          className="w-full h-full object-cover"
+                          onMouseEnter={(e) => e.currentTarget.play()}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.pause();
+                            e.currentTarget.currentTime = 0;
+                          }}
+                        />
+                      ) : img.type === "pdf" ? (
+                        <div className="flex items-center justify-center w-full h-full bg-black text-white text-xs">
+                          PDF
+                        </div>
+                      ) : (
+                        <Image
+                          src={img.url}
+                          alt={`Thumb ${idx}`}
+                          fill
+                          className="object-cover"
+                          unoptimized
+                        />
+                      )}
+                    </button>
+                  ))
+                ) : (
+                  <p className="text-gray-400">لا توجد وسائط</p>
+                )}
+              </div>
           </div>
 
           {/* Actions */}

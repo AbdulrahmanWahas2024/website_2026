@@ -28,12 +28,23 @@ export default function NewsPage() {
   const [showShareSuccess, setShowShareSuccess] = useState(false);
 
   /* const categories = ['الكل', 'أخبار الشركة', 'الفعاليات', 'التعاميم']; */
-  const categories = [  // فلترة الاخبار حسب الفئات الموجودة في النظام erpnext
-    'الكل',
-    ...Array.from(
-      new Set(news.map(n => n.category).filter(Boolean))
-    )
+  const dynamicCategories = Array.from(
+    new Set(news.map(n => n.category).filter(Boolean))
+  );
+  const staticCategories = [
+    'اخبار الشركة',
+    'الفعاليات',
+    'التعاميم',
+    'التقارير',
   ];
+  const categories = Array.from(
+    new Set([
+      'الكل',
+      ...staticCategories,
+      ...dynamicCategories
+    ])
+  );
+  
   /* const archiveYears = ['2024', '2023', '2022', '2021']; */
   // ارشفت الاخبار حسب السنوات الموجودة في النظام erpnext
   const archiveYears = Object.entries(
@@ -51,6 +62,7 @@ export default function NewsPage() {
   );
 
   useEffect(() => {
+    
     const fetchNews = async () => {
 
       try {
@@ -111,7 +123,12 @@ export default function NewsPage() {
     setShowShareSuccess(true);
     setTimeout(() => setShowShareSuccess(false), 3000);
   };
+  const headlines = [
+    "تابع آخر أخبار الشركة لحظة بلحظة",
+    "تحديثات مستمرة وفعاليات رسمية موثوقة"
+  ];
 
+  const [index, setIndex] = useState(0);
   return (
     <main className="bg-bg-main min-h-screen">
       <Header />
@@ -172,6 +189,7 @@ export default function NewsPage() {
                 />
               </div>
               <div className="flex gap-2 w-full md:w-auto overflow-x-auto pb-2 md:pb-0">
+                <div className="sticky top-0 z-40 bg-white border-b border-border py-3"></div>
                 {categories.map((cat) => (
                   <button
                     key={cat}

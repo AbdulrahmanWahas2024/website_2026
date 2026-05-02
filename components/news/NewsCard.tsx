@@ -6,6 +6,18 @@ import Image from 'next/image';
 import { Calendar, Share2, Facebook, Twitter, MessageCircle, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 import { useLanguage } from '@/context/LanguageContext';
+import { getMediaUrl } from "@/lib/media";
+
+function getMediaType(url: string) {
+  const ext = url.split(".").pop()?.toLowerCase();
+  const mediaUrl = getMediaUrl( url);
+
+  if (["mp4", "webm", "ogg", "mov"].includes(ext || "")) {
+    return "video";
+  }
+
+  return "image";
+}
 
 interface NewsCardProps {
   id: string | number;
@@ -26,15 +38,41 @@ export function NewsCard({ id, title, date, category, image, onShare }: NewsCard
       viewport={{ once: true }}
       className="group glass-card rounded-[40px] overflow-hidden border border-white/5 shadow-xl hover:shadow-2xl transition-all duration-500"
     >
+      
       <div className="relative h-[288px] overflow-hidden rounded-xl">
-        <Image 
-          src={image} 
-          alt={title} 
-          fill 
-          sizes="(max-width: 768px) 100vw, 33vw"
-          className="object-cover transition-transform duration-700 group-hover:scale-125"
-          referrerPolicy="no-referrer"
-        />
+        {getMediaType(image) === "video" ? (
+
+          <video
+            src={image}
+            muted
+            loop
+            playsInline
+            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-125"
+            onMouseEnter={(e) => e.currentTarget.play()}
+            onMouseLeave={(e) => e.currentTarget.pause()}
+          />
+          
+
+        ) : (
+
+          <Image
+            src={image}
+            alt={title}
+            fill
+            sizes="(max-width: 768px) 100vw, 33vw"
+            className="object-cover transition-transform duration-700 group-hover:scale-125"
+            referrerPolicy="no-referrer"
+
+           />
+
+        )}
+        {getMediaType(image) === "video" && (
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+            <div className="w-12 h-12 bg-white/80 rounded-full flex items-center justify-center text-black text-sm">
+              ▶
+            </div>
+          </div>
+        )}
         <div className="absolute inset-0 bg-gradient-to-t from-navy-dark/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
         
         {/* Category Badge */}

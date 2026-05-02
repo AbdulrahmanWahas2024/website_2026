@@ -13,8 +13,9 @@ interface PageHeroProps {
 
 export const PageHero = ({ title, subtitle, image = 'https://picsum.photos/seed/oil/1920/600' }: PageHeroProps) => {
   return (
-    <section className="relative h-[30vh] md:h-[40vh] lg:h-[50vh] max-h-[500px] w-full overflow-hidden bg-primary-dark">
+    <section className="relative h-[320px] md:h-[420px] lg:h-[480px] max-h-[500px] w-full overflow-hidden bg-primary-dark">
       <div className="relative h-full w-full overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/20 to-black/60" />
         <Image 
           src={image} 
           alt={title} 
