@@ -12,7 +12,16 @@ export default function HeroSlider() {
   const { t } = useLanguage();
 
   return (
-    <section className="relative h-[50vh] md:h-[70vh] max-h-[600px] w-full overflow-hidden bg-primary-dark">
+    // <section className="relative h-[50vh] md:h-[70vh] max-h-[600px] w-full overflow-hidden bg-primary-dark">
+    <section className=" 
+  relative 
+  h-[60vh] sm:h-[65vh] md:h-[75vh] lg:h-[85vh] xl:h-[90vh]
+  min-h-[420px]
+  max-h-[900px]
+  w-full 
+  overflow-hidden 
+  bg-primary-dark
+"> 
       <div className="absolute inset-0">
         {/* Background */}
         <div className="relative h-full w-full overflow-hidden">
@@ -26,8 +35,8 @@ export default function HeroSlider() {
             referrerPolicy="no-referrer"
           />
           {/* Reduced transparency overlays */}
-          <div className="absolute inset-0 bg-primary-dark/20" />
-          <div className="absolute inset-0 bg-gradient-to-t from-primary-dark/60 via-transparent to-transparent" />
+          <div className="absolute inset-0 bg-primary-dark/10" />
+          <div className="absolute inset-0 bg-gradient-to-t from-primary-dark/50 via-transparent to-transparent" />
         </div>
 
         {/* Content */}
@@ -35,13 +44,37 @@ export default function HeroSlider() {
           <Container>
             <div className="max-w-2xl space-y-4 md:space-y-6">
               <div className="animate-in fade-in slide-in-from-bottom-4 duration-700">
-                <span className="inline-block px-3 py-1 rounded-full bg-accent text-primary-dark text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em] mb-3 md:mb-5">
-                  National Oil Company
+                <span className="inline-block px-3 py-1 rounded-full bg-accent text-primary-dark text-[9px] md:text-[10px] font-black uppercase tracking-[0.2em] mb-3 md:mb-5">
+                  Yemen Petroleum Company
                 </span>
-                <h1 className="text-2xl md:text-4xl lg:text-6xl font-black text-white leading-tight mb-3 md:mb-5 tracking-tight drop-shadow-lg">
+                {/* <h1 className="text-2xl md:text-4xl lg:text-6xl font-black text-white leading-tight mb-3 md:mb-5 tracking-tight drop-shadow-lg"> */}
+                <h1 className="
+  text-2xl 
+  sm:text-4xl 
+  md:text-5xl 
+  lg:text-6xl 
+  xl:text-6xl
+  font-black 
+  text-white 
+  leading-tight 
+  tracking-tight 
+  drop-shadow-lg
+">
                   حلول الطاقة للمستقبل
                 </h1>
-                <p className="text-sm md:text-lg text-white/90 leading-relaxed font-medium max-w-xl drop-shadow-md">
+                {/* <p className="text-sm md:text-lg text-white/90 leading-relaxed font-medium max-w-xl drop-shadow-md"> */}
+                <p className="
+  text-sm 
+  sm:text-base 
+  md:text-lg 
+  lg:text-xl 
+  xl:text-2xl
+  text-white/90 
+  leading-relaxed 
+  font-medium 
+  max-w-xl 
+  drop-shadow-md
+">
                   نعمل بتميز واستدامة لتوفير احتياجات الوطن من الطاقة
                 </p>
               </div>

@@ -22,6 +22,8 @@ import { Button } from '@/components/ui/Button';
 import { Container } from '@/components/ui/Container';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
 import ThemeSwitcher from '@/components/ThemeSwitcher';
+import NextImage from 'next/image';
+import Image from 'next/image';
 
 export default function Header() {
   const { language, setLanguage, t, dir } = useLanguage();
@@ -92,12 +94,23 @@ export default function Header() {
       <Container className="flex items-center justify-between h-20 lg:h-24 gap-4">
         {/* Logo (Right side in RTL) */}
         <Link href="/" className="flex items-center gap-2 sm:gap-3 group shrink-0">
-          <div className="relative w-10 h-10 sm:w-12 sm:h-12 bg-primary rounded-xl flex items-center justify-center text-white font-black text-xl sm:text-2xl shadow-sm group-hover:scale-105 transition-transform">
+          {/* <div className="relative w-10 h-10 sm:w-12 sm:h-12 bg-primary rounded-xl flex items-center justify-center text-white font-black text-xl sm:text-2xl shadow-sm group-hover:scale-105 transition-transform">
             <span>O</span>
+          </div> */} 
+          <div className="relative w-13 h-13 sm:w-13 sm:h-13"> 
+            
+            <Image
+              src="/log_ypc.svg"
+              alt="Site Logo"
+              fill
+             // className="object-contain"
+              className="object-contain hover:scale-105 transition-transform duration-500"
+              priority
+            />
           </div>
           <div className="flex flex-col">
-            <span className="font-black text-lg sm:text-xl leading-tight text-text-primary tracking-tight">NOC</span>
-            <span className="text-[8px] sm:text-[9px] uppercase tracking-widest text-text-secondary font-bold">National Oil Company</span>
+            <span className="font-black text-lg sm:text-xl leading-tight text-text-primary tracking-tight">YPC</span>
+            <span className="text-[12px] sm:text-[12px] uppercase tracking-widest text-text-secondary font-bold">شركة النفط اليمنية</span>
           </div>
         </Link>
 
@@ -120,10 +133,10 @@ export default function Header() {
               <Link
                 href={item.href || '#'}
                 className={cn(
-                  "flex items-center gap-1.5 text-sm font-bold transition-all px-4 py-2 rounded-lg relative overflow-hidden group",
+                  "flex items-center gap-1.5 text - base lg:text-lg font-bold transition-all px-4 py-2 rounded-lg relative overflow-hidden group",
                   activeDropdown === item.id
                     ? "text-primary bg-primary/5"
-                    : "text-text-primary hover:bg-primary/5 hover:text-primary"
+                    : "text-text-primary hover:bg-primary/10 hover:text-primary"
                 )}
               >
                 {item.label}
@@ -210,7 +223,7 @@ export default function Header() {
               <div className="flex justify-between items-center mb-10">
                 <Link href="/" className="flex items-center gap-2" onClick={() => setIsMobileMenuOpen(false)}>
                   <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center text-white font-bold text-xl">O</div>
-                  <span className="font-bold text-text-primary">NOC</span>
+                  <span className="font-bold text-text-primary">YPC</span>
                 </Link>
                 <button
                   onClick={() => setIsMobileMenuOpen(false)}

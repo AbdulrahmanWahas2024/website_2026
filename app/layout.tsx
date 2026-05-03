@@ -22,29 +22,30 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: {
-    default: 'National Oil Company | شركة النفط الوطنية',
-    template: '%s | National Oil Company'
+    default: 'Yemen Petroleum Company ',
+    template: '%s | National Oil Company',
+    
   },
-  description: 'Official portal of the National Oil Company - Providing energy for the future with excellence and sustainability. Explore our services, projects, and latest news.',
-  keywords: ['Oil', 'Energy', 'National Oil Company', 'Yemen', 'Fuel', 'Petroleum', 'شركة النفط'],
-  authors: [{ name: 'National Oil Company' }],
+  description: 'Official portal of the Yemen Petroleum Company - Providing energy for the future with excellence and sustainability. Explore our services, projects, and latest news.',
+  keywords: ['Oil', 'Energy', 'Yemen Petroleum Company', 'Yemen', 'Fuel', 'Petroleum', 'شركة النفط'],
+  authors: [{ name: 'Yemen Petroleum Company' }],
   openGraph: {
     type: 'website',
     locale: 'ar_YE',
     url: 'https://noc.gov.ye',
-    siteName: 'National Oil Company',
+    siteName: 'Yemen Petroleum Company',
     images: [
       {
         url: 'https://picsum.photos/seed/noc-og/1200/630',
         width: 1200,
         height: 630,
-        alt: 'National Oil Company',
+        alt: 'Yemen Petroleum Company',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'National Oil Company | شركة النفط الوطنية',
+    title: 'Yemen Petroleum Company | شركة النفط اليمينة',
     description: 'Official portal of the National Oil Company - Providing energy for the future with excellence and sustainability.',
     images: ['https://picsum.photos/seed/noc-twitter/1200/630'],
   },
@@ -57,6 +58,7 @@ export const viewport = {
   maximumScale: 5,
 };
 
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="ar" dir="rtl" className={`${cairo.variable} ${inter.variable}`} suppressHydrationWarning>
@@ -65,6 +67,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <LanguageProvider>
             <div className="flex flex-col min-h-screen">
               <Header />
+              <link rel="icon" href="/favicon.png" />
               <div className="flex-grow">
                 {children}
               </div>
