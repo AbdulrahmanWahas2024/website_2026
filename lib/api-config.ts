@@ -14,5 +14,8 @@ export const API_CONFIG = {
     FUEL_PRICES: 'YPC Fuel Prices',
     TENDERS: 'YPC Tenders',
     COMPLAINTS: 'YPC Complaints',
-  }
+  },
+  // ENDPOINTS: {
+  //   RESOURCE: (doctype: string) => `/api/resource/${encodeURIComponent(doctype)}`
+  // }
 };

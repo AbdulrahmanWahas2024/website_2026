@@ -25,12 +25,14 @@ import ThemeSwitcher from '@/components/ThemeSwitcher';
 import NextImage from 'next/image';
 import Image from 'next/image';
 
+
 export default function Header() {
   const { language, setLanguage, t, dir } = useLanguage();
   const pathname = usePathname();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);// Track which dropdown is open
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+  
 
   // Get current page title for mobile center
   const getCurrentPageTitle = () => {
@@ -99,14 +101,25 @@ export default function Header() {
           </div> */} 
           <div className="relative w-13 h-13 sm:w-13 sm:h-13"> 
             
-            <Image
-              src="/log_ypc.svg"
+            <Image // Using Next.js Image component for optimization  
+              src="/log_ypc.png"
               alt="Site Logo"
               fill
              // className="object-contain"
-              className="object-contain hover:scale-105 transition-transform duration-500"
+              //className="dark:hidden"
+              sizes="(max-width: 768px) 40px, 60px"
+           className="object-contain hover:scale-105 transition-transform duration-500"
               priority
             />
+            {/* <Image
+              src="/logo_ypc_white.png"
+              alt="Site Logo"
+              fill
+             
+              className="hidden dark:block"
+
+              //priority
+            /> */}
           </div>
           <div className="flex flex-col">
             <span className="font-black text-lg sm:text-xl leading-tight text-text-primary tracking-tight">YPC</span>

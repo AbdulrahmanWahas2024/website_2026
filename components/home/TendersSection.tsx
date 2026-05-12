@@ -6,28 +6,120 @@ import Link from 'next/link';
 import { ArrowRight, FileText, Calendar, MapPin, CheckCircle2 } from 'lucide-react';
 import { Container } from '@/components/ui/Container';
 import { Button } from '@/components/ui/Button';
-import { apiService } from '@/lib/api-service';
 import { API_CONFIG } from '@/lib/api-config';
+import { fetchTenders } from "@/lib/services/tender.service";
 
 export default function TendersSection() {
   const { t } = useLanguage();
   const [tenders, setTenders] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
+  // useEffect(() => {
+
+  //   const load = async () => {
+
+  //     try {
+
+  //       setLoading(true);
+
+  //       const data = await fetchTenders();
+
+  //       console.log("HOME TENDERS:", data);
+
+  //       setTenders(data.slice(0, 3));
+
+  //     } catch (err) {
+
+  //       console.error("TENDERS ERROR:", err);
+
+  //     } finally {
+
+  //       setLoading(false);
+
+  //     }
+
+  //   };
+
+  //   load();
+
+  // }, []);
+  // useEffect(() => {
+
+  //   const fetchTenders = async () => {
+
+  //     try {
+
+  //       setLoading(true);
+
+  //       const fields = JSON.stringify([
+  //         "name",
+  //         "title",
+  //         "status",
+  //         "start_date",
+  //         "closing_date",
+  //         "location",
+  //         "description",
+  //         "file",
+  //         "published"
+  //       ]);
+
+  //       // const filters = encodeURIComponent(JSON.stringify([
+  //       //   ["published", "=", 1]
+  //       // ]));
+  //       const filters = JSON.stringify([
+  //         ["published", "=", 1]
+  //       ]);
+
+  //       // ترتيب حسب الأحدث
+  //       const url =
+  //         `${API_CONFIG.BASE_URL}/api/resource/YPC Tenders` +
+  //         `?fields=${fields}` +
+  //         `&filters=${filters}` +
+  //         `&order_by=creation desc` + // ترتيب المناقصات حسب تاريخ الإنشاء من الأحدث إلى الأقدم
+  //         `&limit_page_length=3`; // جلب 3 مناقصات فقط لعرضها في الصفحة الرئيسية
+  //       console.log("HOME TENDERS URL:", url);
+  //       const res = await fetch(url);
+  //       const result = await res.json();
+  //       console.log("HOME TENDERS RESPONSE:", result);
+
+  //       // ✅ عرض أحدث  مشاريع بناءً على تاريخ الإنشاء مع التعامل مع حالة عدم وجود بيانات
+  //       setTenders(result.data || []);
+  //     }
+  //     catch (err) {
+
+  //       console.error("HOME TENDERS ERROR:", err);
+  //     }
+
+  //     finally {
+  //       setLoading(false);
+  //     }
+  //   };
+  //   fetchTenders();
+
+  // }, []);
   useEffect(() => {
-    const fetchTenders = async () => {
+    const loadTenders = async () => {
       try {
         setLoading(true);
-        const data = await apiService.get<any>(API_CONFIG.DOC_TYPES.TENDERS);
-        setTenders(data.slice(0, 3));
-      } catch (err) {
-      } finally {
+
+        const data = await fetchTenders();
+
+        console.log("FINAL TENDERS:", data);
+
+        setTenders(data);
+      }
+      catch (err) {
+        console.error("HOME TENDERS ERROR:", err);
+      }
+
+      finally {
         setLoading(false);
       }
     };
-    fetchTenders();
-  }, []);
 
+    loadTenders();
+
+  }, []);
   return (
     <section className="section-padding bg-white relative">
       <Container>
@@ -42,14 +134,14 @@ export default function TendersSection() {
             </h2>
           </div>
           <Link 
-            href="/tenders"
+            href="/tenders" // 
             className="inline-flex items-center justify-center gap-2 px-4 py-2 text-xs font-bold transition-all active:scale-95 disabled:opacity-50 disabled:pointer-events-none rounded-lg border border-border hover:bg-bg-soft"
           >
-            {t('common.view_all')}
+            {t('common.view_all')} 
             <ArrowRight size={14} className="rtl:rotate-180" />
           </Link>
         </div>
-
+        
         <div className="space-y-4">
           {loading ? (
             Array.from({ length: 3 }).map((_, idx) => (
@@ -58,7 +150,7 @@ export default function TendersSection() {
           ) : (
             tenders.map((tender, idx) => (
               <div
-                key={tender.id}
+                key={tender.name || idx}
                 className="group bg-bg-soft hover:bg-white border border-border hover:border-accent/30 p-4 md:p-6 rounded-xl flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 md:gap-6 transition-all duration-300 hover:shadow-md"
               >
                 <div className="flex items-center gap-4 w-full lg:w-auto">
@@ -67,7 +159,7 @@ export default function TendersSection() {
                   </div>
                   <div className="space-y-1">
                     <div className="flex items-center gap-2">
-                      <span className="text-[8px] font-black text-accent uppercase tracking-widest">{tender.id}</span>
+                      <span className="text-[8px] font-black text-accent uppercase tracking-widest">{tender?.name}</span>
                       <div className="w-1 h-1 rounded-full bg-border" />
                       <span className="flex items-center gap-1 text-[8px] font-bold text-emerald-600 uppercase tracking-widest">
                         <CheckCircle2 size={10} />
@@ -75,7 +167,7 @@ export default function TendersSection() {
                       </span>
                     </div>
                     <h3 className="text-base font-black text-primary group-hover:text-accent transition-colors line-clamp-1">
-                      {tender.title}
+                      {tender?.title}
                     </h3>
                   </div>
                 </div>
@@ -85,7 +177,7 @@ export default function TendersSection() {
                     <Calendar size={14} className="text-primary" />
                     <div className="flex flex-col">
                       <span className="text-[7px] font-black uppercase tracking-widest">تاريخ الإغلاق</span>
-                      <span className="text-[10px] font-bold text-text-primary">{tender.date}</span>
+                      <span className="text-[10px] font-bold text-text-primary">{tender?.closing_date || "غير محدد"}</span>
                     </div>
                   </div>
                   
@@ -98,7 +190,7 @@ export default function TendersSection() {
                   </div>
 
                   <Link 
-                    href={`/tenders/${tender.id}/apply`} 
+                    href={`/tenders/${tender.name}/apply`} 
                     className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2 text-xs font-bold transition-all active:scale-95 disabled:opacity-50 disabled:pointer-events-none rounded-lg bg-primary text-white group-hover:bg-accent group-hover:text-primary-dark"
                   >
                     تقديم الآن

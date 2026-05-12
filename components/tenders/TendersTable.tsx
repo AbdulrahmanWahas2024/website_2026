@@ -5,14 +5,21 @@ import { motion } from 'motion/react';
 import { Share2, FileText, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 
+// interface Tender {
+//   id: string;
+//   serial: string;
+//   number: string;
+//   title: string;
+//   entity: string;
+//   type: string;
+//   deadline: string;
+// }
 interface Tender {
-  id: string;
-  serial: string;
-  number: string;
+  name: string;
   title: string;
-  entity: string;
-  type: string;
-  deadline: string;
+  status: string;
+  closing_date: string;
+  location?: string;
 }
 
 interface TendersTableProps {
@@ -38,22 +45,22 @@ export function TendersTable({ tenders }: TendersTableProps) {
         <tbody>
           {tenders.map((tender, idx) => (
             <motion.tr 
-              key={tender.id}
+              key={tender.name}
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: idx * 0.05 }}
               className={`border-b border-white/5 hover:bg-white/5 transition-colors ${idx % 2 === 0 ? 'bg-white/5' : 'bg-transparent'}`}
             >
-              <td className="p-6 font-bold text-white/40">{tender.serial}</td>
-              <td className="p-6 font-black text-white">{tender.number}</td>
+              <td className="p-6 font-bold text-white/40">{idx + 1}</td>
+              <td className="p-6 font-black text-white">{tender.name}</td>
               <td className="p-6 font-bold text-white max-w-xs">{tender.title}</td>
-              <td className="p-6 text-white/60">{tender.entity}</td>
+              <td className="p-6 text-white/60">{tender.location || "الإدارة العامة"}</td>
               <td className="p-6">
                 <span className="px-4 py-1.5 rounded-full bg-primary/10 text-primary text-xs font-black uppercase tracking-widest">
-                  {tender.type}
+                  {tender.status}
                 </span>
               </td>
-              <td className="p-6 font-bold text-rose-500">{tender.deadline}</td>
+              <td className="p-6 font-bold text-rose-500">{tender.closing_date}</td>
               <td className="p-6 text-center">
                 <button className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-white/40 hover:bg-primary hover:text-white transition-all mx-auto">
                   <Share2 size={18} />
@@ -61,7 +68,8 @@ export function TendersTable({ tenders }: TendersTableProps) {
               </td>
               <td className="p-6 text-center">
                 <Link 
-                  href={`/tenders/apply/${tender.id}`}
+                  // href={`/tenders/apply/${tender.id}`}
+                  href={`/tenders/${tender.name}/apply`}
                   className="inline-flex items-center gap-2 bg-primary text-white px-6 py-2.5 rounded-xl font-black text-sm hover:bg-primary-dark transition-all shadow-lg"
                 >
                   <FileText size={16} />

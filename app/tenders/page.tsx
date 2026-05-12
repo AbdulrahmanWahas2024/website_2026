@@ -8,7 +8,7 @@ import { motion } from 'motion/react';
 import { FileText, Download, Search, Filter, Calendar, Info } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/Button';
-
+import { fetchTenders } from "@/lib/services/tender.service";
 const Skeleton = ({ className }: { className?: string }) => (
   <div className={`animate-pulse bg-gray-200 rounded ${className}`} />
 );
@@ -28,19 +28,62 @@ export default function TendersPage() {
   const filters = ['الكل', 'مفتوحة', 'مغلقة', 'جديدة'];
   const years = ['2024', '2023', '2022'];
 
-  useEffect(() => {
-    const fetchTenders = async () => {
-      try {
-        setLoading(true);
-        const data = await apiService.get<any>(API_CONFIG.DOC_TYPES.TENDERS);
-        setTenders(data);
-      } catch (err) {
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchTenders();
-  }, []);
+  // useEffect(() => {
+  //   const fetchTenders = async () => {
+  //     try {
+  //       setLoading(true);
+  //       const data = await apiService.get<any>(API_CONFIG.DOC_TYPES.TENDERS);
+  //       console.log("TENDERS API RESPONSE:", data);
+  //       setTenders(data);
+  //     } catch (err) {
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+  //   fetchTenders();
+  // }, []);
+    useEffect(() => {
+      const fetchTenders = async () => {
+        try {
+          setLoading(true);
+  
+          const fields = encodeURIComponent(JSON.stringify([
+            "name",
+            "title",
+            "status",
+            "start_date",
+            "closing_date",
+            "location",
+            "description",
+            "file",
+            "published",
+            "creation"
+          ]));
+  
+          const filters = encodeURIComponent(JSON.stringify([
+            ["published", "=", 1]
+          ]));
+  
+          const url =
+            `${API_CONFIG.BASE_URL}/api/resource/YPC Tenders` +
+            `?fields=${fields}` +
+            `&filters=${filters}` +
+            `&order_by=creation desc`;
+  
+          const res = await fetch(url);
+          const result = await res.json();
+  
+          setTenders(result.data || []);
+  
+        } catch (err) {
+          console.error("TENDERS ERROR:", err);
+        } finally {
+          setLoading(false);
+        }
+      };
+  
+      fetchTenders();
+    }, []);
 
   const filteredTenders = tenders.filter(tender => {
     const matchesSearch = tender.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
@@ -118,13 +161,13 @@ export default function TendersPage() {
                 ) : (
                   filteredTenders.map((tender, idx) => (
                     <motion.tr 
-                      key={tender.id}
+                      key={tender.name}
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: idx * 0.05 }}
                       className="hover:bg-bg-soft transition-colors group"
                     >
-                      <td className="px-8 py-6 font-bold text-primary">{tender.id}</td>
+                      <td className="px-8 py-6 font-bold text-primary">{tender?.name}</td>
                       <td className="px-8 py-6">
                         <div className="flex flex-col">
                           <span className="font-black text-primary group-hover:text-accent transition-colors">{tender.title}</span>
@@ -134,28 +177,28 @@ export default function TendersPage() {
                       <td className="px-8 py-6">
                         <div className="flex items-center gap-2 text-text-primary text-sm font-bold">
                           <Calendar size={14} className="text-accent" />
-                          {tender.date}
+                          {tender.closing_date}
                         </div>
                       </td>
                       <td className="px-8 py-6">
                         <span className={cn(
                           "inline-flex items-center px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest",
-                          tender.status === 'مفتوحة' ? "bg-emerald-100 text-emerald-700" : "bg-red-100 text-red-700"
+                          tender?.status === 'مفتوحة' ? "bg-emerald-100 text-emerald-700" : "bg-red-100 text-red-700"
                         )}>
-                          {tender.status}
+                          {tender?.status}
                         </span>
                       </td>
                       <td className="px-8 py-6">
                         <div className="flex items-center justify-center gap-3">
                           <Link 
-                            href={`/tenders/${tender.id}`}
+                            href={`/tenders/${tender?.name}`}
                             className="inline-flex items-center justify-center p-2.5 rounded-xl border border-border hover:border-primary text-text-secondary hover:text-primary transition-all"
                             title="تفاصيل"
                           >
                             <Info size={18} />
                           </Link>
                           <Link 
-                            href={`/tenders/${tender.id}/apply`}
+                            href={`/tenders/${tender?.name}/apply`}
                             className="inline-flex items-center justify-center gap-2 px-6 py-2 text-xs font-bold transition-all active:scale-95 btn-gov rounded-xl"
                           >
                             {t('common.apply')}
